@@ -8,7 +8,7 @@ Commands
 --------
 
 * `sail`: restart boot2docker (`boot2docker down` followed by `boot2docker up`)
-* `follow <image_name>`: search an elastic search container by name and show it's logs in a ala `docker logs -f <container>` (eg. ``)
+* `follow <image_name>`: search an elastic search container by name and show it's logs in a ala `docker logs -f <container>` (eg. `./ahab.sh follow elasticsearch`)
 * `kill`: stops every running docker (with `docker stop`) instance and removes them with `docker rm`
 * `dispose`: removes unused docker images (marked as `<none>`) with `docker rmi`
 
