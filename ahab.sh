@@ -26,7 +26,7 @@ case $1 in
         docker rm $* $(docker ps -a -q)
 	;;
 	dispose)
-		echo -e "Sink all coffins and all hearses to one common pool!!\n"
+		echo -e "Sink all coffins and all hearses to one common pool!\n"
 		shift
 		docker images | grep "<none>" | grep --o "[0-9a-f]\{12\}" | xargs docker rmi $*
 	;;
