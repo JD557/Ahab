@@ -4,11 +4,18 @@ red='\033[0;31m'
 
 case $1 in
 	sail)
-		echo -e "Aye, aye!\n"
+		echo -e "Naught’s an obstacle,\nnaught’s an angle to the iron way!\n"
         shift
 		boot2docker down $*
 		boot2docker up $*
 	;;
+    trust)
+        echo -e "Aye, aye!\n"
+        shift
+        registry=$1
+        shift
+        boot2docker ssh $* "sudo sh -c 'echo \"EXTRA_ARGS=\\\"--insecure-registry '$registry'\\\"\" > /var/lib/boot2docker/profile'"
+    ;;
     follow)
         echo -e "I'll chase him round Good Hope,\nand round the Horn,\nand round the Norway Maelstrom,\nand round perdition's flames before I give him up.\n"
         shift
