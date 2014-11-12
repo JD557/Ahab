@@ -26,6 +26,10 @@ case $1 in
         shift
         docker logs -f $container $*
     ;;
+    execute)
+       echo -e "Imagine if you must,\na whale in a bust,\nname it you might\nas it is alive and white!"
+       docker run -d $(docker images | grep $2 | cut -f1 -d' ' | head -n1)
+    ;;
     kill)
 		echo -e "Towards thee I roll, thou all-destroying but unconquering whale;\nto the last I grapple with thee;\nfrom hell's heart I stab at thee;\nfor hate's sake I spit my last breath at thee.\n"
 		shift
