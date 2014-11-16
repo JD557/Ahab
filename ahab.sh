@@ -1,6 +1,4 @@
 #!/bin/bash
-noColor='\033[0m'
-red='\033[0;31m'
 
 case $1 in
 	sail)
@@ -27,7 +25,7 @@ case $1 in
 		docker logs -f $container $*
 	;;
 	execute)
-	   echo -e "Imagine if you must,\na whale in a bust,\nname it you might\nas it is alive and white!"
+	   echo -e "Imagine if you must,\na whale in a bust,\nname it you might\nas it is alive and white!\n"
        shift
 	   docker run -d $(docker images | grep $1 | cut -f1 -d ' ' | head -n1) $*
 	;;
@@ -43,6 +41,13 @@ case $1 in
 		docker images -f dangling=true | grep -o "[0-9a-f]\{12\}" | xargs docker rmi $*
 	;;
 	*)
-		echo -e "I ${red}sail${noColor} the seven seas,\nTo ${red}follow${noColor} my catch,\nI ${red}kill${noColor} the mighty whales,\nAnd ${red}dispose${noColor} of them in batch"
+		echo -e "Usage: $0 COMMAND [arg...]\n\nA simple docker/boot2docker helper script, to help with tedious docker tasks.\n"
+		echo -e "Commands:"
+		echo -e "\tsail\tStart/Restart boot2docker"
+		echo -e "\ttrust\tTrust an insecure registry (trust <registry>)"
+		echo -e "\tfollow\tSearch for a container and prints its logs (follow <image name>)"
+		echo -e "\texecute\tStart a container from an image name (execute <image name>)"
+		echo -e "\tkill\tStop every running container and removes them"
+		echo -e "\tdispose\tRemov unused docker images"
 	;;
 esac
