@@ -19,7 +19,7 @@ case $1 in
 	follow)
 		echo -e "I'll chase him round Good Hope,\nand round the Horn,\nand round the Norway Maelstrom,\nand round perdition's flames before I give him up.\n"
 		shift
-		until containers=`docker ps | grep $1 | grep --o "[0-9a-f]\{12\}"`; do
+		until containers=`docker ps | grep $1 | grep -o "[0-9a-f]\{12\}"`; do
 			:
 		done
 		container=`echo $containers | head -n 1`
@@ -29,7 +29,7 @@ case $1 in
 	execute)
 	   echo -e "Imagine if you must,\na whale in a bust,\nname it you might\nas it is alive and white!"
        shift
-	   docker run -d $(docker images | grep $1 | cut -f1 -d' ' | head -n1) $*
+	   docker run -d $(docker images | grep $1 | cut -f1 -d ' ' | head -n1) $*
 	;;
 	kill)
 		echo -e "Towards thee I roll, thou all-destroying but unconquering whale;\nto the last I grapple with thee;\nfrom hell's heart I stab at thee;\nfor hate's sake I spit my last breath at thee.\n"
@@ -40,7 +40,7 @@ case $1 in
 	dispose)
 		echo -e "Sink all coffins and all hearses to one common pool!\n"
 		shift
-		docker images | grep "<none>" | grep --o "[0-9a-f]\{12\}" | xargs docker rmi $*
+		docker images -f dangling=true | grep -o "[0-9a-f]\{12\}" | xargs docker rmi $*
 	;;
 	*)
 		echo -e "I ${red}sail${noColor} the seven seas,\nTo ${red}follow${noColor} my catch,\nI ${red}kill${noColor} the mighty whales,\nAnd ${red}dispose${noColor} of them in batch"
