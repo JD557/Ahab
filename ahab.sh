@@ -27,7 +27,9 @@ case $1 in
 	execute)
 		echo -e "Imagine if you must,\na whale in a bust,\nname it you might\nas it is alive and white!\n"
     	shift
-		docker run -d $(docker images | grep $1 | cut -f1 -d ' ' | head -n1) $*
+		image=$1
+		shift
+		docker run -d $(docker images | grep $image | cut -f1 -d ' ' | head -n1) $*
 	;;
 	kill)
 		echo -e "Towards thee I roll, thou all-destroying but unconquering whale;\nto the last I grapple with thee;\nfrom hell's heart I stab at thee;\nfor hate's sake I spit my last breath at thee.\n"
