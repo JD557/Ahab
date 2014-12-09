@@ -40,7 +40,7 @@ case $1 in
 	dispose)
 		echo -e "Sink all coffins and all hearses to one common pool!\n"
 		shift
-		docker images -f dangling=true | grep -o "[0-9a-f]\{12\}" | xargs docker rmi $*
+        docker rmi $(docker images -f "dangling=true" -q) $*
 	;;
 	*)
 		echo -e "Usage: $0 COMMAND [arg...]\n\nA simple docker/boot2docker helper script, to help with tedious docker tasks.\n"
