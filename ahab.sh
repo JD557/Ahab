@@ -12,7 +12,7 @@ case $1 in
 		shift
 		registry=$1
 		shift
-		boot2docker ssh $* "sudo sh -c 'echo \"EXTRA_ARGS=\\\"--insecure-registry '$registry'\\\"\" > /var/lib/boot2docker/profile'"
+		boot2docker ssh "sudo sh -c 'echo \"EXTRA_ARGS=\\\"--insecure-registry '$registry'\\\"\" > /var/lib/boot2docker/profile && /etc/init.d/docker restart'"
 	;;
 	follow)
 		echo -e "I'll chase him round Good Hope,\nand round the Horn,\nand round the Norway Maelstrom,\nand round perdition's flames before I give him up.\n"
@@ -50,6 +50,6 @@ case $1 in
 		echo -e "\tfollow\tSearch for a container and prints its logs (follow <image name>)"
 		echo -e "\texecute\tStart a container from an image name (execute <image name>)"
 		echo -e "\tkill\tStop every running container and removes them"
-		echo -e "\tdispose\tRemov unused docker images"
+		echo -e "\tdispose\tRemove unused docker images"
 	;;
 esac
