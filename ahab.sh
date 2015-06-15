@@ -4,8 +4,8 @@ case $1 in
 	sail)
 		echo -e "Naught’s an obstacle,\nnaught’s an angle to the iron way!\n"
 		shift
-		boot2docker down $*
-		boot2docker up $*
+		boot2docker down
+		boot2docker up
 	;;
 	trust)
 		echo -e "Aye, aye!\n"
