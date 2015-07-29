@@ -31,6 +31,13 @@ case $1 in
 		shift
 		docker run -d $(docker images | grep $image | cut -f1 -d ' ' | head -n1) $*
 	;;
+	board)
+		echo -e "A steak, a steak, ere I sleep!\nYou, Daggoo! overboard you go, and cut me one from his small!"
+		shift
+		image=$1
+		shift
+		docker exec -it $* $(docker ps | grep $image | awk '{ print $1 }' | head -n 1) bash
+	;;
 	kill)
 		echo -e "Towards thee I roll, thou all-destroying but unconquering whale;\nto the last I grapple with thee;\nfrom hell's heart I stab at thee;\nfor hate's sake I spit my last breath at thee.\n"
 		shift
@@ -49,6 +56,7 @@ case $1 in
 		echo -e "\ttrust\tTrust an insecure registry (trust <registry>)"
 		echo -e "\tfollow\tSearch for a container and prints its logs (follow <image name>)"
 		echo -e "\texecute\tStart a container from an image name (execute <image name>)"
+		echo -e "\tboard\tStart a shell inside a container (board <image name>)"
 		echo -e "\tkill\tStop every running container and removes them"
 		echo -e "\tdispose\tRemove unused docker images"
 	;;
