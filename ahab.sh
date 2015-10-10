@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function start_docker_host {
 	if hash docker-machine 2>/dev/null; then
 		docker-machine start $*
