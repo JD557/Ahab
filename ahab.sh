@@ -19,7 +19,7 @@ function stop_docker_host {
 }
 
 function trust_registry {
-	registry=$1
+	local registry=$1
 	shift
 	if hash docker-machine 2>/dev/null; then
 		docker-machine ssh $* "sudo sh -c 'echo \"EXTRA_ARGS=\\\"--insecure-registry '$registry'\\\"\" > /var/lib/boot2docker/profile && /etc/init.d/docker restart'"
