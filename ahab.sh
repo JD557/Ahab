@@ -43,7 +43,8 @@ case $1 in
 	follow)
 		echo -e "I'll chase him round Good Hope,\nand round the Horn,\nand round the Norway Maelstrom,\nand round perdition's flames before I give him up.\n"
 		shift
-		until containers=`docker ps | grep $1 | grep -o "[0-9a-f]\{12\}"`; do
+		image=$1
+		until containers=`docker ps | grep $image | grep -o "[0-9a-f]\{12\}"`; do
 			:
 		done
 		container=`echo $containers | head -n 1`
@@ -55,7 +56,7 @@ case $1 in
 		shift
 		image=$1
 		shift
-		docker run -d $(docker images | grep $image | cut -f1 -d ' ' | head -n1) $*
+		docker run -d $(docker images | grep $image | awk '{ print $1 }' | head -n 1) $*
 	;;
 	board)
 		echo -e "A steak, a steak, ere I sleep!\nYou, Daggoo! overboard you go, and cut me one from his small!"
