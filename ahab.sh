@@ -44,7 +44,7 @@ case $1 in
 		echo -e "I'll chase him round Good Hope,\nand round the Horn,\nand round the Norway Maelstrom,\nand round perdition's flames before I give him up.\n"
 		shift
 		image=$1
-		until containers=`docker ps | grep $image | grep -o "[0-9a-f]\{12\}"`; do
+		until containers=`docker ps | tail -n +2 | grep $image | grep -o "[0-9a-f]\{12\}"`; do
 			:
 		done
 		container=`echo $containers | head -n 1`
@@ -56,14 +56,14 @@ case $1 in
 		shift
 		image=$1
 		shift
-		docker run -d $(docker images | grep $image | awk '{ print $1 }' | head -n 1) $*
+		docker run -d $(docker images | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1) $*
 	;;
 	board)
 		echo -e "A steak, a steak, ere I sleep!\nYou, Daggoo! overboard you go, and cut me one from his small!"
 		shift
 		image=$1
 		shift
-		docker exec -it $* $(docker ps | grep $image | awk '{ print $1 }' | head -n 1) bash
+		docker exec -it $* $(docker ps | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1) bash
 	;;
 	kill)
 		echo -e "Towards thee I roll, thou all-destroying but unconquering whale;\nto the last I grapple with thee;\nfrom hell's heart I stab at thee;\nfor hate's sake I spit my last breath at thee.\n"
