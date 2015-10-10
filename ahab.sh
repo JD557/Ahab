@@ -67,8 +67,9 @@ case $1 in
 	kill)
 		echo -e "Towards thee I roll, thou all-destroying but unconquering whale;\nto the last I grapple with thee;\nfrom hell's heart I stab at thee;\nfor hate's sake I spit my last breath at thee.\n"
 		shift
-		docker stop $* $(docker ps -a -q)
-		docker rm $* $(docker ps -a -q)
+		containers=`docker ps -a -q`
+		docker stop $* $containers
+		docker rm $* $containers
 	;;
 	dispose)
 		echo -e "Sink all coffins and all hearses to one common pool!\n"
