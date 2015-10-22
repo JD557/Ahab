@@ -4,7 +4,7 @@ set -e
 
 function start_docker_host {
 	if hash docker-machine 2>/dev/null; then
-		docker-machine start $*
+		docker-machine start $DOCKER_MACHINE_NAME $*
 	else
 		boot2docker up $*
 	fi
@@ -12,7 +12,7 @@ function start_docker_host {
 
 function stop_docker_host {
 	if hash docker-machine 2>/dev/null; then
-		docker-machine stop $*
+		docker-machine stop $DOCKER_MACHINE_NAME $*
 	else
 		boot2docker down $*
 	fi
@@ -22,7 +22,7 @@ function trust_registry {
 	local registry=$1
 	shift
 	if hash docker-machine 2>/dev/null; then
-		docker-machine ssh $* "sudo sh -c 'echo \"EXTRA_ARGS=\\\"--insecure-registry '$registry'\\\"\" > /var/lib/boot2docker/profile && /etc/init.d/docker restart'"
+		docker-machine ssh $DOCKER_MACHINE_NAME $* "sudo sh -c 'echo \"EXTRA_ARGS=\\\"\\\$EXTRA_ARGS --insecure-registry $registry\\\"\" >> /var/lib/boot2docker/profile && /etc/init.d/docker restart'"
 	else
 		boot2docker ssh $* "sudo sh -c 'echo \"EXTRA_ARGS=\\\"--insecure-registry '$registry'\\\"\" > /var/lib/boot2docker/profile && /etc/init.d/docker restart'"
 	fi
