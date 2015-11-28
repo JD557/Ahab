@@ -49,14 +49,14 @@ case $1 in
 		done
 		container=`echo $containers | head -n 1`
 		shift
-		docker logs -f $container $*
+		docker logs -f $* $container
 	;;
 	execute)
 		echo -e "Imagine if you must,\na whale in a bust,\nname it you might\nas it is alive and white!\n"
 		shift
 		image=$1
 		shift
-		docker run -d $(docker images | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1) $*
+		docker run -d $* $(docker images | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1)
 	;;
 	board)
 		echo -e "A steak, a steak, ere I sleep!\nYou, Daggoo! overboard you go, and cut me one from his small!"
@@ -75,7 +75,7 @@ case $1 in
 	dispose)
 		echo -e "Sink all coffins and all hearses to one common pool!\n"
 		shift
-		docker rmi $(docker images -f "dangling=true" -q) $*
+		docker rmi $* $(docker images -f "dangling=true" -q)
 	;;
 	*)
 		echo -e "Usage: $0 COMMAND [arg...]\n\nA simple docker/boot2docker helper script, to help with tedious docker tasks.\n"
