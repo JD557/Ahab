@@ -44,7 +44,7 @@ case $1 in
 		echo -e "I'll chase him round Good Hope,\nand round the Horn,\nand round the Norway Maelstrom,\nand round perdition's flames before I give him up.\n"
 		shift
 		image=$1
-		until containers=`docker ps | tail -n +2 | grep $image | grep -o "[0-9a-f]\{12\}"`; do
+		until containers=`docker ps | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
 			:
 		done
 		container=`echo $containers | head -n 1`
