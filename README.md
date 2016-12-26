@@ -14,7 +14,8 @@ Commands
   This command needs to be followed by the machine name if you are using docker-machine
   (you probably want to use the `--engine-insecure-registry` option when creating the machine, though).
 * `follow <image_name> <other flags to be passed>`:
-  Search for container by image name and show its logs, like `docker logs -f <container>`
+  Search for container by image name and follow its logs, like `docker logs -f <container>`.
+  If the container dies, follow searches for the container again. Hit CTRL-C to stop.
   (eg. `./ahab.sh follow elasticsearch -t`). It blocks until there is at least one container running that image.
 * `execute <image_name> <other flags to be passed>`: Search for an image and launch a container
   (eg. `./ahab.sh execute elastic -p 9200:9200`).
