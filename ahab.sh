@@ -28,6 +28,25 @@ function trust_registry {
 	fi
 }
 
+function log_follow {
+	local ended_once=false
+	local image=$1
+	shift
+	local args=$*
+	while :
+	do
+		until containers=`docker ps | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
+			sleep 0.5
+		done
+		if [ "$ended_once" = true ] ; then
+			echo -e "\n==> New container found. Following logs now. <==\n"
+		fi
+		container=`echo $containers | head -n 1`
+		docker logs -f $args $container
+		ended_once=true
+	done
+}
+
 case $1 in
 	sail)
 		echo -e "Naught’s an obstacle,\nnaught’s an angle to the iron way!\n"
@@ -43,13 +62,7 @@ case $1 in
 	follow)
 		echo -e "I'll chase him round Good Hope,\nand round the Horn,\nand round the Norway Maelstrom,\nand round perdition's flames before I give him up.\n"
 		shift
-		image=$1
-		until containers=`docker ps | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
-			:
-		done
-		container=`echo $containers | head -n 1`
-		shift
-		docker logs -f $* $container
+		log_follow $*
 	;;
 	execute)
 		echo -e "Imagine if you must,\na whale in a bust,\nname it you might\nas it is alive and white!\n"
