@@ -35,7 +35,7 @@ function log_follow {
 	local args=$*
 	while :
 	do
-		until containers=`docker ps | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
+		until containers=`docker ps --filter status=running | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
 			sleep 0.5
 		done
 		if [ "$ended_once" = true ] ; then
@@ -43,6 +43,7 @@ function log_follow {
 		fi
 		container=`echo $containers | head -n 1`
 		docker logs -f $args $container
+        sleep 3
 		ended_once=true
 	done
 }
