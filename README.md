@@ -1,14 +1,14 @@
 Ahab
 ====
 
-A simple docker/boot2docker/docker-machine helper script, to help with tedious docker tasks.
+A simple docker/boot2docker/docker-machine/podman helper script, to help with tedious docker tasks.
 Named after [Captain Ahab](https://en.wikipedia.org/wiki/Captain_Ahab_(Moby-Dick)).
 
 Commands
 --------
 
 * `sail`:
-  Start/Restart boot2docker/docker-machine. This command needs to be followed by the machine name if you are using docker-machine.
+  Start/Restart boot2docker/docker-machine/podman machine. This command needs to be followed by the machine name if you are using docker-machine.
 * `trust <registry>`
   Trust an insecure registry by adding a `EXTRA_ARGS="--insecure-registry <registry>"` line to the boot2docker profile in the boot2docker image.
   This command needs to be followed by the machine name if you are using docker-machine
