@@ -5,16 +5,20 @@ set -e
 function start_docker_host {
 	if hash docker-machine 2>/dev/null; then
 		docker-machine start $DOCKER_MACHINE_NAME $*
-	else
+	elif hash boot2docker 2>/dev/null; then
 		boot2docker up $*
+	elif hash podman 2>/dev/null; then
+		podman machine start $*
 	fi
 }
 
 function stop_docker_host {
 	if hash docker-machine 2>/dev/null; then
 		docker-machine stop $DOCKER_MACHINE_NAME $*
-	else
+	elif hash boot2docker 2>/dev/null; then
 		boot2docker down $*
+	elif hash podman 2>/dev/null; then
+		podman machine stop $*
 	fi
 }
 
@@ -28,6 +32,11 @@ function trust_registry {
 	fi
 }
 
+DOCKER='docker'
+if hash podman 2>/dev/null; then
+  DOCKER=podman
+fi
+
 function log_follow {
 	local ended_once=false
 	local image=$1
@@ -35,14 +44,14 @@ function log_follow {
 	local args=$*
 	while :
 	do
-		until containers=`docker ps | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
+		until containers=`$DOCKER ps | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
 			sleep 0.5
 		done
 		container=`echo $containers | head -n 1`
 		if [ "$ended_once" = true ] ; then
 			echo -e "==> New container [$container] found. Following logs now. <==\n"
 		fi
-		docker logs -f $args $container
+		$DOCKER logs -f $args $container
 		echo -e "\n==> Container [$container] terminated. Waiting for new. <=="
 		ended_once=true
 	done
@@ -70,31 +79,31 @@ case $1 in
 		shift
 		image=$1
 		shift
-		docker run -d $* $(docker images | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1)
+		$DOCKER run -d $* $($DOCKER images | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1)
 	;;
 	board)
 		echo -e "A steak, a steak, ere I sleep!\nYou, Daggoo! overboard you go, and cut me one from his small!"
 		shift
 		image=$1
 		shift
-		docker exec -it $* $(docker ps | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1) bash
+		$DOCKER exec -it $* $($DOCKER ps | tail -n +2 | grep $image | awk '{ print $1 }' | head -n 1) bash
 	;;
 	kill)
 		echo -e "Towards thee I roll, thou all-destroying but unconquering whale;\nto the last I grapple with thee;\nfrom hell's heart I stab at thee;\nfor hate's sake I spit my last breath at thee.\n"
 		shift
-		containers=`docker ps -a -q`
-		docker stop $* $containers
-		docker rm $* $containers
+		containers=`$DOCKER ps -a -q`
+		$DOCKER stop $* $containers
+		$DOCKER rm $* $containers
 	;;
 	dispose)
 		echo -e "Sink all coffins and all hearses to one common pool!\n"
 		shift
-		docker rmi $* $(docker images -f "dangling=true" -q)
+		$DOCKER rmi $* $($DOCKER images -f "dangling=true" -q)
 	;;
 	*)
-		echo -e "Usage: $0 COMMAND [arg...]\n\nA simple docker/boot2docker helper script, to help with tedious docker tasks.\n"
+		echo -e "Usage: $0 COMMAND [arg...]\n\nA simple docker/boot2docker/podman helper script, to help with tedious docker tasks.\n"
 		echo -e "Commands:"
-		echo -e "\tsail\tStart/Restart boot2docker/docker-machine (sail / sail <machine name>)"
+		echo -e "\tsail\tStart/Restart boot2docker/docker-machine/podman (sail / sail <machine name>)"
 		echo -e "\ttrust\tTrust an insecure registry (trust <registry> / trust <registry> <machine name>)"
 		echo -e "\tfollow\tSearch for a container and prints its logs (follow <image name>)"
 		echo -e "\texecute\tStart a container from an image name (execute <image name>)"
