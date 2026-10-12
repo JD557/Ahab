@@ -47,11 +47,11 @@ function log_follow {
 		until containers=`$DOCKER ps | tail -n +2 | grep $image | grep -o "^[0-9a-f]\{12\}"`; do
 			sleep 0.5
 		done
-		container=`echo $containers | head -n 1`
+		container=$(printf '%s\n' "$containers" | head -n 1)
 		if [ "$ended_once" = true ] ; then
 			echo -e "==> New container [$container] found. Following logs now. <==\n"
 		fi
-		$DOCKER logs -f $args $container
+		$DOCKER logs -f $args "$container"
 		echo -e "\n==> Container [$container] terminated. Waiting for new. <=="
 		ended_once=true
 	done
